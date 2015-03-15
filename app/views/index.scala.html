@@ -1,0 +1,133 @@
+@(registrationForm: Form[TournamentRegistration])
+
+@import helper._
+@import helper.twitterBootstrap._
+
+@main(Html("Payment & Registration Form")) {
+    <img style="margin-top: -105px;" height="95px;"  align="right" src="https://www.paypalobjects.com/webstatic/mktg/Logo/AM_mc_vs_ms_ae_UK.png" border="0" alt="PayPal Acceptance Mark"/>
+    @helper.form(action = routes.Application.submit) {
+     	  <fieldset>
+	        <legend>Tournament Entry Information</legend>
+	            
+	        @select(
+		        registrationForm("sectionEntered"),		        
+		        options = Seq("Open" -> "Open", "Minor" -> "Minor – ECF grade under 140 or ungraded"),
+		        '_default -> "--- Choose section ---",
+		        '_label -> "Section entered",
+		        '_error -> registrationForm("sectionEntered").error.map(_.withMessage("Please select entry section"))
+	        )
+	        
+	        @inputText(
+                registrationForm("fee"), 
+                '_label -> "Entry fee £",
+                '_help -> "Numeric"
+            )
+          
+          <div class="help-block input" style="margin-bottom: 15px;">
+            ECF Silver/Gold/Platinum members: £18 <br/>
+            Junior ECF Bronze members and non-members: £21 <br/>
+            Adult ECF Bronze members and non-members: £23 <br/>
+            Discounts, White Lion Chess Group and Streatham & Brixton CC members: £3 <br/>  
+            <b>All Donations gratefully received</b> <br/>  
+          </div>
+          
+          
+          @inputText(
+            registrationForm("byeInRounds"), 
+            '_label -> "Bye in Round"
+          )
+
+          <div class="help-block input" style="margin-bottom: 10px;margin-top: -15px;">
+            For example enter 1, 3 if byes in rounds 1 and 3 are required<br/>
+            Only byes in rounds 1 to 5 are allowed 
+          </div>
+          
+        </fieldset>
+        
+       
+        
+        <fieldset>
+            <legend>Player Information</legend>
+            
+            @inputText(
+                registrationForm("player.firstName"), 
+                '_label -> "First Name(s)"
+            )
+
+            @inputText(
+                registrationForm("player.lastName"), 
+                '_label -> "Surname"
+            )
+
+            @inputText(
+                registrationForm("player.email"), 
+                '_label -> "Email",
+                '_help -> "Required"
+            )
+            
+            @textarea(
+                registrationForm("player.address"), 
+                '_label -> "Address", 'cols -> 50
+            )
+
+            @inputText(
+                registrationForm("player.postcode"), 
+                '_label -> "Post Code",
+                'size -> 8
+            )
+
+            @inputText(
+                registrationForm("player.phone"), 
+                '_label -> "Phone"
+            )
+
+            @inputDate(
+                registrationForm("player.dateOfBirth"), 
+                '_label -> "Date of Birth",
+                'size -> 10,
+                '_help -> "dd/mm/yyyy (for juniors born after 1 September 1996)"
+            )
+        </fieldset>
+
+        <fieldset>
+            <legend>Chess Details</legend>
+
+            @inputText(
+                registrationForm("player.chessclub"), 
+                '_label -> "Chess Club"
+            )
+
+            @inputText(
+                registrationForm("player.ecfMembershipNo"), 
+                '_label -> "ECF Membership No."
+            )
+
+            @inputText(
+                registrationForm("player.ecfGradingRef"), 
+                '_label -> "ECF Grading Ref."
+            )
+
+            @inputText(
+                registrationForm("player.rapidGrade"), 
+                '_label -> "Rapidplay Grade"
+            )
+
+            @inputText(
+                registrationForm("player.slowGrade"), 
+                '_label -> "Slowplay Grade"
+            )
+
+             @textarea(
+                registrationForm("player.gradeEstimate"), 
+                '_label -> "Estimated Grade",
+                'cols -> 50,
+                '_help -> "If ungraded, please provide an estimate, details of any rating (e.g. FIDE rating) and details of any recent results."
+            )
+        </fieldset>
+
+         <div class="actions">
+            <input type="submit" class="btn primary" value="Pay via Paypal">
+            <a href="@routes.Application.form" class="btn">Cancel</a>
+        </div>
+    }
+}

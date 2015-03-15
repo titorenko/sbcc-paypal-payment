@@ -1,0 +1,90 @@
+@(tuples: Seq[(TournamentRegistration, Seq[PaypalNotification])], orphans: Iterable[PaypalNotification] )
+
+
+@main(Html("Registered players"), "width: 1150px") {
+    
+    <h2>Registrations</h2>
+
+    <div>
+      <table>
+        <thead>
+          <tr>
+            <th>Section</th>
+            <th>Fee<span style="width:70px;display:block"></span></th>  
+            <th>Name</th>
+            <th>Email</th>
+            <th>Address<span style="width:100px;display:block"></span></th>
+            <th>DoB</th>
+            <th>Phone</th>
+            <th>Club</th>
+            <th>ECF No</th>
+            <th>Grading Ref</th>
+            <th>Rapid</th>
+            <th>Slow</th>
+            <th>Estimated Grade</th>
+            <th>Byes</th>
+          </tr>
+        </thead>
+        @for(tuple <- tuples) {
+        @defining(tuple._1) { reg =>        
+        @defining(tuple._2) { notifications =>
+          <tr>
+            <td>@reg.sectionEntered</td>
+            <td>@{reg.fee}£<br/>@Paypal.paimentStatus(reg, notifications)</td>
+            <td>@reg.player.firstName @reg.player.lastName</td>
+            <td>@reg.player.email</td>
+            <td>
+              @reg.player.address
+              <br/>
+              @reg.player.postcode
+            </td>
+            <td>@reg.player.dateOfBirth</td>
+            <td>@reg.player.phone</td>
+            <td>@reg.player.chessclub</td>
+            <td>@reg.player.ecfMembershipNo</td>
+            <td>@reg.player.ecfGradingRef</td>
+            <td>@reg.player.rapidGrade</td>
+            <td>@reg.player.slowGrade</td>
+            <td>@reg.player.gradeEstimate</td>
+            <td>@reg.byeInRounds</td>
+          </tr>
+          @for(n <- notifications) {
+            <tr class="blue">
+	            <td colspan="2">@n.paymentAmount @n.paymentCcy</td>
+	            <td>@n.paymentStatus</td>
+	            <td title="@n.fullNotification">@n.verificationStatus</td>
+            </tr>
+          }
+        }}}
+      </table>    
+    </div>
+    
+    <h2>Orphan notifications</h2>
+    <div>
+      <table>
+        <thead>
+          <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Registration Id</th>
+            <th>Paid to</th>
+            <th>Amount paid</th>
+            <th>Payment status</th>
+            <th>Verification status</th>
+          </tr>
+        </thead>
+        @for(n <- orphans) {
+          <tr>
+            <td>@n.firstName</td>
+            <td>@n.lastName</td>
+            <td>@n.registrationId</td>
+            <td>@n.receiverEmail</td>
+            <td>@n.paymentAmount @n.paymentCcy</td>
+            <td>@n.paymentStatus</td>
+            <td title="@n.fullNotification">@n.verificationStatus</td>
+          </tr>
+        }
+      </table>
+    </div>
+
+}

@@ -1,0 +1,12 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Home page
+GET   /                       controllers.Application.form
+POST  /submitPayment				  controllers.Application.submit
+GET   /listRegistrations			controllers.Application.list
+POST  /ipn                    controllers.Paypal.ipn
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file               controllers.Assets.at(path="/public", file)
